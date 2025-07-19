@@ -1,0 +1,221 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&display=swap');
+
+:root {
+  --primary: #ff4b5c;
+  --pricecolor: #ff4b5c;
+  --bg: #1e1e2f;
+  --input-bg: #2c2c3c;
+  --input-border: #444;
+  --btn-bg: #ff4b5c;
+  --btn-hover: #e03e4e;
+  --text: #f0f0f0;
+  --label: #bbbbbb;
+  --card-bg: #252535;
+}
+
+body, html {
+  font-family: 'Barlow', 'AZF-PREISSCHILD', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.form-container {
+  padding: 2rem;
+  background-color: var(--card-bg);
+  max-width: 1100px;
+  margin: 2rem auto;
+  box-shadow: 0 0 24px rgba(0,0,0,0.4);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+h3 {
+  font-size: 1.6rem;
+  color: var(--primary);
+  margin-top: 2rem;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.3rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--label);
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="color"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-size: 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text);
+  transition: border 0.3s ease, background 0.3s ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+input[type="file"] {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  background-color: var(--btn-bg);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+button:hover {
+  background-color: var(--btn-hover);
+  transform: translateY(-1px);
+}
+
+.input-with-paste {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-with-paste input,
+.input-with-paste textarea {
+  flex: 1;
+}
+
+.paste-btn {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.85rem;
+  background-color: var(--primary);
+  border-radius: 6px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.paste-btn:hover {
+  background-color: var(--btn-hover);
+}
+
+
+  font-size: 2.8rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: var(--primary);
+}
+
+  font-weight: 700;
+  color: var(--text);
+}
+
+  font-size: 2.8rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: var(--primary);
+}
+
+
+.azf-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--primary);
+  margin: 0;
+}
+
+  font-weight: 700;
+  color: var(--text);
+}
+
+  display: inline-block;
+  background-color: var(--primary);
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  margin-left: 0.5rem;
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+  background-color: var(--btn-hover);
+}
+
+.azf-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.azf-preisschild-title {
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--primary);
+  margin: 0 auto;
+  text-align: center;
+  flex: 1;
+}
+
+.azf-preisschild-title strong {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.azf-title-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.azf-title-btn {
+  display: inline-block;
+  background-color: var(--primary);
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.azf-title-btn:hover {
+  background-color: var(--btn-hover);
+}
