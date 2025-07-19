@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+
+<html lang="de">
+<head><link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#d72638" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta charset="utf-8"/>
+<title>Preisschild Generator – AZF (Final)</title>
+<link href="form-style.css" rel="stylesheet"/><link href="preisschild.css" rel="stylesheet"/></head>
+<body>
+<div class="form-container"><div class="azf-title-wrapper"><h1 class="azf-preisschild-title"><strong>AZF</strong>-PREISSCHILD</h1><div class="azf-title-buttons"><a class="azf-title-btn" href="https://www.azf-gruppe.de/fahrzeuge" target="_blank">AZF</a><a class="azf-title-btn" href="https://goqr.me/de/#t=url" target="_blank">QR</a></div></div>
+<hr/>
+<h3>Layout-Vorlagen</h3>
+<div class="form-group">
+<label>Layoutname:</label><br/>
+<input id="layoutName" placeholder="z. B. Sonderangebot Rot" type="text"/>
+<button onclick="saveLayout()">Speichern</button>
+<select id="savedLayouts" onchange="loadLayout()">
+<option value="">– Layout laden –</option>
+</select>
+<button onclick="deleteLayout()">Löschen</button>
+</div>
+<hr/>
+<h3>Preisschild speichern/laden</h3>
+<div class="form-group">
+<button onclick="savePreisschild()">Preisschild speichern</button>
+<select id="savedPreisschilder" onchange="loadPreisschild()">
+<option value="">– Preisschild laden –</option>
+</select>
+<button onclick="deletePreisschild()">Löschen</button>
+<div class="form-group"><label>Banner-Text:</label><br/><input id="bannerText" type="text" value="SONDERPREIS"/></div>
+<div class="form-group"><label>Akzentfarbe (Banner, Häkchen):</label><br/><input id="primaryColor" type="color" value="#d72638"/></div>
+<div class="form-group"><label>Hauspreis-Farbe:</label><br/><input id="priceColor" type="color" value="#d72638"/></div>
+<div class="form-group"><label>Titel:</label><br/><div class="input-with-paste"><input id="titel" style="width:100%" type="text"/><button class="paste-btn" onclick="pasteToInput('titel')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Hauspreis:</label><br/><div class="input-with-paste"><input id="preis" type="text"/><button class="paste-btn" onclick="pasteToInput('preis')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>UPE (Bruttolistenpreis):</label><br/><div class="input-with-paste"><input id="upe" type="text"/><button class="paste-btn" onclick="pasteToInput('upe')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Auftragsnummer:</label><br/><div class="input-with-paste"><input id="auftrag" type="text"/><button class="paste-btn" onclick="pasteToInput('auftrag')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>EZ:</label><br/><div class="input-with-paste"><input id="ez" type="text"/><button class="paste-btn" onclick="pasteToInput('ez')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Kilometer:</label><br/><div class="input-with-paste"><input id="km" type="text"/><button class="paste-btn" onclick="pasteToInput('km')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Leistung (PS):</label><br/><div class="input-with-paste"><input id="ps" type="text"/><button class="paste-btn" onclick="pasteToInput('ps')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Getriebe:</label><br/><div class="input-with-paste"><input id="getriebe" type="text"/><button class="paste-btn" onclick="pasteToInput('getriebe')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Farbe:</label><br/><div class="input-with-paste"><input id="farbe" type="text"/><button class="paste-btn" onclick="pasteToInput('farbe')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Sitze / Türen:</label><br/><div class="input-with-paste"><input id="sitzeTueren" type="text"/><button class="paste-btn" onclick="pasteToInput('sitzeTueren')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Ausstattung (max. 32 Zeilen):</label><br/><div class="input-with-paste"><textarea id="ausstattung" rows="10" style="width:100%"></textarea><button class="paste-btn" onclick="pasteToInput('ausstattung')" type="button">Einfügen</button></div></div>
+<div class="form-group"><label>Fahrzeugbild:</label><br/><input accept="image/*" id="bild" type="file"/></div>
+<div class="form-group">
+<button onclick="window.open('https://goqr.me/de/#t=url', '_blank')">QR Code erstellen</button>
+</div>
+<div class="form-group"><label>QR-Code (Bild):</label><br/><input accept="image/*" id="qrcode" type="file"/></div>
+<button id="generateBtn">Preisschild erstellen</button>
+</div>
+</div>
+<div id="preview"></div>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("generateBtn").addEventListener("click", generate);
+});
+
+function generate() {
+  const d = {
+    banner: document.getElementById('bannerText').value || 'SONDERPREIS',
+    primary: document.getElementById('primaryColor').value || '#d72638',
+    pricecol: document.getElementById('priceColor').value || '#d72638',
+    titel: document.getElementById('titel').value,
+    preis: document.getElementById('preis').value,
+    upe: document.getElementById('upe').value,
+    auftrag: document.getElementById('auftrag').value,
+    ez: document.getElementById('ez').value,
+    km: document.getElementById('km').value,
+    ps: document.getElementById('ps').value,
+    getriebe: document.getElementById('getriebe').value,
+    farbe: document.getElementById('farbe').value,
+    sitzeTueren: document.getElementById('sitzeTueren').value,
+    ausstattung: document.getElementById('ausstattung').value
+  };
+
+  document.documentElement.style.setProperty('--primary', d.primary);
+  document.documentElement.style.setProperty('--pricecolor', d.pricecol);
+
+  const bildFile = document.getElementById('bild').files[0];
+  const qrFile = document.getElementById('qrcode').files[0];
+
+  const readFileAsDataURL = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  Promise.all([
+    bildFile ? readFileAsDataURL(bildFile) : Promise.resolve(''),
+    qrFile ? readFileAsDataURL(qrFile) : Promise.resolve('')
+  ]).then(([imgSrc, qrSrc]) => {
+    buildPreview(imgSrc, d, qrSrc);
+  });
+}
+
+function buildPreview(imgSrc, d, qrSrc) {
+  document.getElementById('preview').innerHTML = `
+    <div class="sonderpreis-banner">${d.banner}</div>
+    <div class="top-section">
+      ${imgSrc ? `<img src="${imgSrc}" alt="Fahrzeug">` : ''}
+      <div>
+        <div class="title">${d.titel}</div>
+        <div class="price">Hauspreis: ${d.preis} ${d.upe ? `<span style="text-decoration: line-through; color: black; font-size: 1.3rem; margin-left: 1rem;">UPE: ${d.upe}</span>` : ''}</div>
+        <div class="info-row">
+          <div class="info-box"><strong>EZ:</strong> ${d.ez}</div>
+          <div class="info-box"><strong>Kilometer:</strong> ${d.km}</div>
+          <div class="info-box"><strong>Leistung:</strong> ${d.ps}</div>
+          <div class="info-box"><strong>Getriebe:</strong> ${d.getriebe}</div>
+          <div class="info-box"><strong>Farbe:</strong> ${d.farbe}</div>
+          <div class="info-box"><strong>Sitze / Türen:</strong> ${d.sitzeTueren}</div>
+        </div>
+      </div>
+    </div>
+    ${buildFeatures(d.ausstattung)}
+    <div style="text-align:center;"><div class="footer-hint" style="display:inline-block;">
+      Sie wünschen ein Leasing- oder Finanzierungsangebot? Unser Verkaufsteam berät Sie gern – sprechen Sie uns einfach an!
+    </div>
+    <div style="text-align:center; font-size:0.85rem; margin-top:0.25rem;"><strong>Auftragsnummer:</strong> ${d.auftrag}</div>
+<div id="qr-code-container" style="position:absolute; bottom:0.5rem; right:1.0rem;"></div>
+
+</div>`;
+
+  if (qrSrc) {
+    const qrDiv = document.getElementById('qr-code-container');
+    if (qrDiv) {
+      qrDiv.innerHTML = `<img src="${qrSrc}" alt="QR Code" style="height:70px;">`;
+    }
+  }
+
+}
+
+function buildFeatures(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l && l.toLowerCase() !== 'ausstattung').slice(0, 32);
+  const cols = [[], [], [], []];
+  lines.forEach((l, i) => cols[Math.floor(i / 8)].push(l));
+  return `
+    <div class="category">Ausstattung</div>
+    <div class="features-grid">
+      ${cols.map(col => `
+        <div class="feature-box">
+          <div class="features">
+            ${col.map(x => `<div>${x}</div>`).join('')}
+          </div>
+        </div>`).join('')}
+    
+    
+</div>`;
+}
+
+// Layout speichern/laden/löschen
+function saveLayout() {
+  const name = document.getElementById('layoutName').value.trim();
+  if (!name) return alert("Bitte Layoutnamen eingeben.");
+  const layout = {
+    banner: document.getElementById('bannerText').value,
+    primary: document.getElementById('primaryColor').value,
+    priceColor: document.getElementById('priceColor').value
+  };
+  localStorage.setItem("layout_" + name, JSON.stringify(layout));
+  updateLayoutDropdown();
+}
+
+function loadLayout() {
+  const sel = document.getElementById('savedLayouts');
+  const val = sel.value;
+  if (!val) return;
+  const layout = JSON.parse(localStorage.getItem("layout_" + val));
+  if (layout) {
+    document.getElementById('bannerText').value = layout.banner;
+    document.getElementById('primaryColor').value = layout.primary;
+    document.getElementById('priceColor').value = layout.priceColor;
+  }
+}
+
+function deleteLayout() {
+  const sel = document.getElementById('savedLayouts');
+  const val = sel.value;
+  if (!val) return;
+  localStorage.removeItem("layout_" + val);
+  updateLayoutDropdown();
+}
+
+function updateLayoutDropdown() {
+  const sel = document.getElementById('savedLayouts');
+  sel.innerHTML = '<option value="">– Layout laden –</option>';
+  for (let key in localStorage) {
+    if (key.startsWith("layout_")) {
+      const name = key.replace("layout_", "");
+      sel.innerHTML += `<option value="${name}">${name}</option>`;
+    }
+  }
+}
+
+// Preisschild speichern/laden/löschen (Auftragsnummer als Schlüssel)
+function savePreisschild() {
+  const auftrag = document.getElementById('auftrag').value.trim();
+  if (!auftrag) return alert("Bitte Auftragsnummer angeben.");
+  const data = {
+    banner: document.getElementById('bannerText').value,
+    primary: document.getElementById('primaryColor').value,
+    pricecol: document.getElementById('priceColor').value,
+    titel: document.getElementById('titel').value,
+    preis: document.getElementById('preis').value,
+    upe: document.getElementById('upe').value,
+    auftrag: auftrag,
+    ez: document.getElementById('ez').value,
+    km: document.getElementById('km').value,
+    ps: document.getElementById('ps').value,
+    getriebe: document.getElementById('getriebe').value,
+    farbe: document.getElementById('farbe').value,
+    sitzeTueren: document.getElementById('sitzeTueren').value,
+    ausstattung: document.getElementById('ausstattung').value
+  };
+  localStorage.setItem("fahrzeug_" + auftrag, JSON.stringify(data));
+  updatePreisschildDropdown();
+}
+
+function loadPreisschild() {
+  const sel = document.getElementById('savedPreisschilder');
+  const val = sel.value;
+  if (!val) return;
+  const d = JSON.parse(localStorage.getItem("fahrzeug_" + val));
+  if (d) {
+    document.getElementById('bannerText').value = d.banner;
+    document.getElementById('primaryColor').value = d.primary;
+    document.getElementById('priceColor').value = d.pricecol;
+    document.getElementById('titel').value = d.titel;
+    document.getElementById('preis').value = d.preis;
+    document.getElementById('upe').value = d.upe;
+    document.getElementById('auftrag').value = d.auftrag;
+    document.getElementById('ez').value = d.ez;
+    document.getElementById('km').value = d.km;
+    document.getElementById('ps').value = d.ps;
+    document.getElementById('getriebe').value = d.getriebe;
+    document.getElementById('farbe').value = d.farbe;
+    document.getElementById('sitzeTueren').value = d.sitzeTueren;
+    document.getElementById('ausstattung').value = d.ausstattung;
+  }
+}
+
+function deletePreisschild() {
+  const sel = document.getElementById('savedPreisschilder');
+  const val = sel.value;
+  if (!val) return;
+  localStorage.removeItem("fahrzeug_" + val);
+  updatePreisschildDropdown();
+}
+
+function updatePreisschildDropdown() {
+  const sel = document.getElementById('savedPreisschilder');
+  sel.innerHTML = '<option value="">– Preisschild laden –</option>';
+  for (let key in localStorage) {
+    if (key.startsWith("fahrzeug_")) {
+      const name = key.replace("fahrzeug_", "");
+      sel.innerHTML += `<option value="${name}">${name}</option>`;
+    }
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  updateLayoutDropdown();
+  updatePreisschildDropdown();
+});
+
+</script>
+<script>
+async function pasteToInput(id) {
+  try {
+    const text = await navigator.clipboard.readText();
+    const el = document.getElementById(id);
+    if (el) el.value = text;
+  } catch (err) {
+    alert("Zugriff auf die Zwischenablage nicht möglich.");
+  }
+}
+</script><script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</body>
+</html>
