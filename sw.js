@@ -2,11 +2,14 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('preisschild-v1').then(cache =>
       cache.addAll([
-        './',
-        './index.html',
-        './form-style.css',
-        './preisschild.css',
-        './manifest.json'
+        '/',
+        '/index.html',
+        '/form-style.css',
+        '/preisschild.css',
+        '/manifest.json',
+        '/sw.js',
+        '/icons/icon-192.png',
+        '/icons/icon-512.png'
       ])
     )
   );
