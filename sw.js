@@ -9,8 +9,8 @@ self.addEventListener('install', e => {
         '/manifest.json',
         '/sw.js',
         '/icons/icon-192.png',
-        '/icons/icon-512.png'
-        /favicon.ico
+        '/icons/icon-512.png',
+        '/favicon.ico'
       ])
     )
   );
